@@ -1,21 +1,20 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional 
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
+const fs = require("fs");
 const { ethers } = require("hardhat");
-const hre = require("hardhat");
-const fetch = require("cross-fetch");
-const { constants } = require("ethers");
-const { defaultAccounts } = require("@ethereum-waffle/provider");
-async function main() {
-  // We get the contract to deploy
+const { utils } = require("ethers");
+const R = require("ramda");
+const main = async () => {
+  //let deployConfig = (process.env.HARDHAT_NETWORK === 'kovan' || config.defaultNetwork === 'kovan') ? kovanConfig : mainnetConfig
+  console.log("\n\n 📡 Deploying...\n");
   const NFC= await ethers.getContractFactory("NFC");
-  console.log("Deploying NFC...");
-  const nfc = await NFC.deploy();
+  const nfc = await deploy("NFC")
   await nfc.deployed();
-  console.log("NFC deployed to:", nfc.address);
-}
+  console.log(
+    " 💾  Artifacts (address, abi, and args) saved to: ",
+    chalk.blue("packages/hardhat/artifacts/"),
+    "\n\n"
+  );
+};
+
 main()
   .then(() => process.exit(0))
   .catch(error => {

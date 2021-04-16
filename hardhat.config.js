@@ -9,6 +9,16 @@ task("accounts", "Prints the list of accounts", async () => {
     console.log(account.address);
   }
 });
+function mnemonic() {
+  try {
+    return fs.readFileSync("./mnemonic.txt").toString().trim();
+  } catch (e) {
+    if (defaultNetwork !== "localhost") {
+      console.log("☢️ WARNING: No mnemonic file created for a deploy account. Try `yarn run generate` and then `yarn run account`.")
+    }
+  }
+  return "";
+}
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -19,11 +29,12 @@ task("accounts", "Prints the list of accounts", async () => {
 module.exports = {
   solidity: "0.7.0",
   networks: {
-    hardhat: {
-      forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/"
-      }
-    }
+    kovan: {
+      url: "https://kovan.infura.io/v3/6d91ef39fb7141c2876439f1e7ccba72", //<---- YOUR INFURA ID! (or it won't work)
+      accounts: {
+        mnemonic: mnemonic(),
+      },
+    },
   }
 };
 
